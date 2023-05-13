@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.12)  12 MAY 2023 22:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.12)  12 MAY 2023 22:43
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -322,29 +322,40 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 10.
  [1
 
-{c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+{c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./referencePaper.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 2.
+)
+\tf@toc=\write5
+\openout5 = `referencePaper.toc'.
+
+ [2]
 \openout4 = `referencePaper.pyg'.
 
  (./_minted-referencePaper/default.pygstyle) (./_minted-referencePaper/AC01E860CA47D5924639268B8EF6BA7544963C1EEA649473B57EEA9F58EB3831.pygtex)
 \openout3 = `referencePaper.pyg'.
 
- (./_minted-referencePaper/F9676AC96D2A0568CE62553125FFBDAD44963C1EEA649473B57EEA9F58EB3831.pygtex) [2] (./referencePaper.aux)
+ (./_minted-referencePaper/F9676AC96D2A0568CE62553125FFBDAD44963C1EEA649473B57EEA9F58EB3831.pygtex) [3] (./referencePaper.aux)
 runsystem(del referencePaper.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 5953 strings out of 476025
- 121017 string characters out of 5794015
+ 5977 strings out of 476025
+ 121311 string characters out of 5794015
  1852382 words of memory out of 5000000
- 26321 multiletter control sequences out of 15000+600000
- 515487 words of font info for 43 fonts, out of 8000000 for 9000
+ 26336 multiletter control sequences out of 15000+600000
+ 518232 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  77i,6n,77p,536b,529s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on referencePaper.pdf (2 pages, 69575 bytes).
+Output written on referencePaper.pdf (3 pages, 70663 bytes).
 PDF statistics:
- 41 PDF objects out of 1000 (max. 8388607)
- 24 compressed objects within 1 object stream
+ 44 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
