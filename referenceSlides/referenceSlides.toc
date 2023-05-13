@@ -1,0 +1,2 @@
+\beamer@sectionintoc {1}{Basic Usage}{3}{0}{1}
+\beamer@sectionintoc {2}{Using it with other things}{5}{0}{2}

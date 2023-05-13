@@ -1,0 +1,64 @@
+\documentclass{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\usepackage{fontspec}
+\usepackage{minted}
+
+\setsansfont{Open Sans}
+
+\usetheme{metropolis}           % Use metropolis theme
+\title{List Comprehension}
+\subtitle{in Python}
+\date{\today}
+\author{Karl Steven Velasco Orjalo}
+\institute{Python Quickstart}
+
+\begin{document}
+\metroset{block=fill}
+  \maketitle
+
+  \begin{frame}{Lesson Outline}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents
+  \end{frame}
+
+  \section{Basic Usage}
+  \begin{frame}[fragile]
+    \frametitle{Basic Usage}
+
+    Here's how we can use list comprehension to go through a list in Python.
+    \newline
+    \begin{minted}{python}
+      lst = [1,2,3,4]
+
+      for num in lst: 
+        print(num)
+    \end{minted}
+  \end{frame}
+
+  \section{Using it with other things}
+  \begin{frame}[fragile]
+    \frametitle{With Dictionaries}
+
+    We can use it with \textbf{dictionaries} too.
+    \newline
+
+    \begin{minted}{python3}
+      dct = {"age":3}
+      arr = [dct]
+
+      print(arr)
+    \end{minted}
+    \vspace{0.8cm}
+    \begin{block}{Be careful!}
+      The output of this would be an array with length of one, not two!
+    \end{block}
+
+  \end{frame}
+  
+  \appendix
+
+  \begin{frame}[standout]
+    Questions?
+  \end{frame}
+
+\end{document}
