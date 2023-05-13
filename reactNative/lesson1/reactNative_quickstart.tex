@@ -3,18 +3,20 @@
 \usepackage{fontspec}
 \usepackage{tcolorbox}
 \tcbuselibrary{minted,skins}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
 
 \newtcblisting{bashcode}{
   listing engine=minted,
   colback=bashcodebg,
   colframe=bashcodebg,
   listing only,
-  minted style=monokai,
-  minted language=console,
+  minted style=native,
+  minted language=bash,
   minted options={linenos=true,texcl=true},
   left=1mm,
 }
-\definecolor{bashcodebg}{rgb}{0.1,0.1,0.1}
+\definecolor{bashcodebg}{rgb}{0.95,0.95,0.95}
 
 \setsansfont{Open Sans}
 
@@ -86,15 +88,69 @@ npm
   \end{frame}
 
   \begin{frame}[fragile]
+    \frametitle{Installing Git for Windows}
+
+    Git for Windows installs a Bash emulator allowing us to work with Git. 
+    Git uses linux commands and will enable us to collaborate on a single codebase.
+    \newline
+
+    Download it from here:  \url{https://gitforwindows.org/}
+
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Changing VSCode's default terminal to Git Bash}
+    \begin{columns}[onlytextwidth]
+      \begin{column}{0.6\textwidth}
+        \centering
+        \includegraphics[scale=0.4]{settings_bottom_toolbar}
+      \end{column}
+      \begin{column}{0.4\textwidth}
+        Open VSCode's settings through the bottom left Settings button.
+      \end{column}
+    \end{columns}
+  \end{frame}
+  \begin{frame}
+    \frametitle{Changing VSCode's default terminal to Git Bash (cont.)}
+    \begin{columns}[onlytextwidth]
+      \begin{column}{0.4\textwidth}
+        Change the Default terminal to Git Bash, as shown:
+      \end{column}
+      \begin{column}{0.6\textwidth}
+        \centering
+        \includegraphics[scale=0.18]{default_terminal}
+      \end{column}
+    \end{columns}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Opening a Git Bash Terminal in VSCode}
+    Now, open up a Terminal instance in VSCode from the top left toolbar.
+    \vspace{0.5cm}
+
+    \includegraphics[scale=0.6]{terminal_toolbar}
+  \end{frame}
+  \begin{frame}
+    \frametitle{Opening a Git Bash Terminal in VSCode (cont.)}
+    You should now see a colorful terminal. 
+    
+    We will use VSCode's Terminal with Git Bash when referring to a `Terminal', unless otherwise stated.
+    \vspace{0.5cm}  
+
+    \includegraphics[scale=0.25]{terminal}
+  \end{frame}
+
+
+  \begin{frame}[fragile]
     \frametitle{Installing Yarn}
 
     Yarn is my preferred package manager, though there are others out there! Yarn will help us more efficiently handle external
     dependencies/libraries.
 
-    In your Command Prompt, enter the following command:
+    In your Terminal, enter the following command:
     \newline
     \begin{bashcode}
-npm install --global yarn
+$ npm install --global yarn
     \end{bashcode}
 
   \end{frame}
@@ -104,10 +160,10 @@ npm install --global yarn
 
     Expo allows us to run the app on iOS and Android using the Expo Go app. 
 
-    In your Command Prompt, enter the following command:
+    In your Terminal, enter the following command:
     \newline
     \begin{bashcode}
-yarn create expo-app myNewProject
+$ yarn create expo-app myNewProject
     \end{bashcode}
     \vspace{0.5cm}
     Whichever directory you were in previously, you should now see a new folder /myNewProject created!
@@ -118,11 +174,11 @@ yarn create expo-app myNewProject
 
     Now that we have /myNewProject, let's run the app!
 
-    Enter the following commands into your Command Prompt:
+    Enter the following commands into your Terminal:
     \newline
     \begin{bashcode}
-cd /myNewProject
-yarn expo start
+$ cd myNewProject/
+$ yarn expo start
     \end{bashcode}
     \vspace{0.5cm}
     After a while a QR code should have popped up, scan it with the Expo Go app!

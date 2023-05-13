@@ -1,0 +1,203 @@
+\documentclass{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,skins}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\newtcblisting{jscode}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  left=1mm,
+}
+\newtcblisting{jscodesmall}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  minted options={fontsize=\tiny},
+  left=1mm,
+}
+\newtcblisting{bashcode}{
+  listing engine=minted,
+  colback=bashbg,
+  colframe=bashbg,
+  listing only,
+  minted style=native,
+  minted language=bash,
+  minted options={linenos=true,texcl=true},
+  left=1mm,
+}
+\definecolor{codebg}{rgb}{0.2,0.2,0.2}
+\definecolor{bashbg}{rgb}{0.85,0.85,0.85}
+
+\setsansfont{Open Sans}
+
+\usetheme{metropolis}           % Use metropolis theme
+\title{Lesson 3: Exploring React Native}
+\subtitle{Styling and Positioning}
+\date{\today}
+\author{Karl Steven Velasco Orjalo}
+\institute{React Native Quickstart}
+
+\begin{document}
+\metroset{block=fill}
+  \maketitle
+
+  \begin{frame}{Lesson Outline}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents
+  \end{frame}
+
+  \section{Customizing our Bottom Bar}
+  \begin{frame}[fragile]
+    \frametitle{Adding Icons to the Bottom Bar}
+    Our Bottom Bar looks plain with triangles, let's add icons!
+
+    For all the slides regarding the Bottom Bar icons, we'll be working in \verb|./App.js|.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Adding Icons to the Bottom Bar (cont.)}
+    First, let's add an external library giving us icons. 
+
+    Add \verb|MaterialCommunityIcons| just below our other external dependencies: 
+
+    \begin{jscode}
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+    \end{jscode}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Adding Icons to the Bottom Bar (cont.)}
+    Next, let's give icons to our Bottom Bar.
+
+    Make changes to <TabNavigator> as below:
+
+    \begin{jscodesmall}
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName;
+        if (route.name === "Home") {
+          iconName = "home";
+        } else if (route.name === "Account") {
+          iconName = "account";
+        }
+
+        return (
+          <MaterialCommunityIcons
+            name={iconName}
+            size={30}
+            color={color}
+            style={{ height: 30 }}
+          />                              
+        );
+      }
+    })}
+  >
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Choosing different icons}
+    For the library \verb|MaterialCommunityIcons|, the icon names are taken from \url{https://pictogrammers.com/library/mdi/}.
+
+    \vspace{0.5cm}
+    Experiment with different icons!
+  \end{frame}
+
+  \section{Styling a Page}
+  \begin{frame}[fragile]
+    \frametitle{Centering our Page Text}
+
+    As we can see on both the Home and Account page, the Text is at an awkward position at the top left. 
+
+    Under \verb|./src/styles/|, create a file called \verb|global.js|.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Centering our Page Text (cont.)}
+
+    In \verb|./src/styles/global.js|, add the following code: 
+
+    \begin{jscode}
+import { StyleSheet, Dimensions } from "react-native";
+const globalStyles = StyleSheet.create({
+})
+export default globalStyles
+    \end{jscode}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Centering our Page Text (cont.)}
+
+    We will now define \verb|globalStyles.container| as below:
+
+    \begin{jscodesmall}
+const globalStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    padding: 16,
+    alignItems: "center"
+  }
+})
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Centering our Page Text (cont.)}
+
+    Now, we will use the style we defined in \verb|./src/pages/home.jsx|.
+
+    Import \verb|globalStyles| just below our dependency imports like below: 
+
+    \begin{jscodesmall}
+import React from 'react'
+import {View, Text} from 'react-native'
+
+import globalStyles from '../styles/globalStyles'
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Centering our Page Text (cont.)}
+
+    Then, edit \verb|<View>| to take in the style:
+
+    \begin{jscodesmall}
+<View style={globalStyles.container}>
+  <Text>This is the Home page.</Text>
+</View>
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Verifying our change}
+
+    Now, run the app on Expo Go. 
+    You should see the difference between the \verb|Home| page and \verb|Account| page. 
+
+    If you haven't noticed yet, styling in React Native maps its methods to CSS styling methods!
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Changing the appearance of Text}
+
+    Try making a new style definition under \verb|globalStyles| in \verb|./src/styles/global.js| for the Text in the \verb|Home| page!
+  \end{frame}
+
+  \appendix
+
+  \begin{frame}[standout]
+    End of Lesson
+
+    {\small Questions? Reach out at:}
+    {\footnotesize karlorjalo@gmail.com}
+  \end{frame}
+
+\end{document}
