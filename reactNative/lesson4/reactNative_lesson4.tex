@@ -1,0 +1,218 @@
+\documentclass{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,skins}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\newtcblisting{jscode}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  left=1mm,
+}
+\newtcblisting{jscodesmall}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  minted options={fontsize=\tiny},
+  left=1mm,
+}
+\newtcblisting{bashcode}{
+  listing engine=minted,
+  colback=bashbg,
+  colframe=bashbg,
+  listing only,
+  minted style=native,
+  minted language=bash,
+  minted options={linenos=true,texcl=true},
+  left=1mm,
+}
+\definecolor{codebg}{rgb}{0.2,0.2,0.2}
+\definecolor{bashbg}{rgb}{0.85,0.85,0.85}
+
+\setsansfont{Open Sans}
+
+\usetheme{metropolis}           % Use metropolis theme
+\title{Lesson 4: Exploring React Native}
+\subtitle{Creating a Component}
+\date{\today}
+\author{Karl Steven Velasco Orjalo}
+\institute{React Native Quickstart}
+
+\begin{document}
+\metroset{block=fill}
+  \maketitle
+
+  \begin{frame}{Lesson Outline}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents
+  \end{frame}
+
+  \section{Creating a basic Button}
+  \begin{frame}[fragile]
+    \frametitle{Adding a button to a page}
+    We'll now be working on \verb|./src/pages/Home.jsx| to make a button and \verb|./src/styles/global.js| to style the button. 
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Adding a button to a page (cont.)}
+    In \verb|./src/pages/Home.jsx| we will now make a basic button. 
+    First, let's bring in \verb|Pressable| from \verb|'react-native'| as such: 
+
+    \begin{jscodesmall}
+import {View, Text, Pressable} from 'react-native'
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Adding a button to a page (cont.)}
+    Then, let's replace our existing \verb|<Text>| with a \verb|<Pressable>| and a \verb|<Text>| child as such: 
+
+    \begin{jscodesmall}
+return (
+  <View style={globalStyles.container}>
+
+    <Pressable>
+        <View>
+          <Text>Press me!</Text>
+        </View>
+    </Pressable>
+
+  </View>
+)
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Styling our Button}
+    Let's now style our button in \verb|./src/styles/global.js|!
+
+    \vspace{0.5cm}
+    \begin{jscodesmall}
+publishButton: {
+  backgroundColor: "black",
+  borderRadius: 15,
+  marginLeft: 20,
+  marginRight: 20,
+  marginBottom: 50
+},
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Styling our Button (cont.)}
+    Let's now style our button in \verb|./src/styles/global.js|!
+
+    \vspace{0.5cm}
+    \begin{jscodesmall}
+button: {
+  backgroundColor: "pink",
+  padding: 8,
+  borderRadius: 8,
+},
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Styling our Button (cont.)}
+    Now, let's use the style in \verb|.src/pages/Home.jsx|.
+
+    \vspace{0.5cm}
+    \begin{jscodesmall}
+return (
+  <View style={globalStyles.container}>
+
+    <Pressable>
+        <View style={globalStyles.button}>
+          <Text>Press me!</Text>
+        </View>
+    </Pressable>
+
+  </View>
+)
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Giving our button functionality}
+    To give our button functionality, we have to edit our \verb|<Pressable>|. 
+
+    \vspace{0.5cm}
+    \begin{jscodesmall}
+return (
+  <View style={globalStyles.container}>
+    <Pressable onPress={()=>{console.log("Button pressed!")}}>
+      <View style={globalStyles.button}>
+        <Text>Press me!</Text>
+      </View>
+    </Pressable>
+  </View>
+)
+    \end{jscodesmall}
+  \end{frame}
+
+  \section{Making our Button a reusable Component}
+  \begin{frame}[fragile]
+    \frametitle{Why do we need reusable components?}
+    
+    If you need multiple Buttons in multiple pages, we're not going to copy/paste the same code several times.
+    
+    Instead, we'll make it into an easily reusable Component. 
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Making a component file}
+    In \verb|./src/components/|, create a file called \verb|button.jsx|. 
+
+    \vspace{0.5cm}
+    \begin{jscodesmall}
+import React from 'react'
+import {View, Text, Pressable} from 'react-native'
+import globalStyles from "../styles/globalStyles";
+
+const Button = ({onPress}) => {
+  return (
+    <Pressable onPress={onPress}>
+      <View style={globalStyles.button}>
+        <Text>Press me!</Text>
+      </View>
+    </Pressable>
+  )
+}
+
+export default Button
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Using our component}
+    Back in \verb|./src/pages/Home.jsx|, import our newly created \verb|Button|.
+
+    \vspace{0.5cm}
+    \begin{jscodesmall}
+import Button from '../components/Button'
+
+const Home = () => {
+  return (
+    <View style={globalStyles.container}>
+      <Button onPress={()=>{console.log("Button pressed!")}} />
+    </View>
+  )
+}
+    \end{jscodesmall}
+  \end{frame}
+
+  \appendix
+
+  \begin{frame}[standout]
+    End of Lesson
+
+    {\small Questions? Reach out at:}
+    {\footnotesize karlorjalo@gmail.com}
+  \end{frame}
+
+\end{document}
