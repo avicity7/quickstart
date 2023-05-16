@@ -1,0 +1,212 @@
+\documentclass{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,skins}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\newtcblisting{jscode}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  left=1mm,
+}
+\newtcblisting{jscodesmall}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  minted options={fontsize=\tiny},
+  left=1mm,
+}
+\newtcblisting{bashcode}{
+  listing engine=minted,
+  colback=bashbg,
+  colframe=bashbg,
+  listing only,
+  minted style=native,
+  minted language=bash,
+  minted options={linenos=true,texcl=true},
+  left=1mm,
+}
+\definecolor{codebg}{rgb}{0.2,0.2,0.2}
+\definecolor{bashbg}{rgb}{0.85,0.85,0.85}
+
+\setsansfont{Open Sans}
+
+\usetheme{metropolis}           % Use metropolis theme
+\title{Lesson 5: Diving Deeper into React Native}
+\subtitle{Creating a Feed}
+\date{\today}
+\author{Karl Steven Velasco Orjalo}
+\institute{React Native Quickstart}
+
+\begin{document}
+\metroset{block=fill}
+  \maketitle
+
+  \begin{frame}{Lesson Outline}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents
+  \end{frame}
+
+  \section{Exploring JSON, JavaScript Object Notation}
+  \begin{frame}[fragile]
+    \frametitle{Getting the news}
+    We'll be using an online service to convert the New York Times' RSS feed to a JSON object. 
+
+    It is accessible through the link \url{https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml}.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Getting the news (cont.)}
+    Under \verb|result.items|, we can see that we now have an array of articles. The format of each article is as below: 
+
+    \begin{jscodesmall}
+{
+  "guid": "some-link.html",
+  "url": "some-link.html",
+  "title": "Article Title",
+  "content_html": "Some Text",
+  "summary": "Some Text",
+  "date_published": "2023-05-16T00:08:31.000Z",
+  "author": {
+    "name": "Mark Landler"
+  }
+},
+    \end{jscodesmall}
+  \end{frame}
+  
+  \section{Creating an Article thumbnail}
+  \begin{frame}[fragile]
+    \frametitle{Displaying a single Article}
+    In \verb|./src/components/|, create a file called \verb|articleThumbnail.jsx|.
+
+    Enter the following code: 
+
+    \begin{jscodesmall}
+import React from 'react'
+import {View, Text} from 'react-native'
+
+const ArticleThumbnail = ({item}) => {
+  return(
+    <View>
+      <Text>{item.title}</Text>
+      <Text>{item.summary}</Text>
+      <Text>{item.date_published}</Text>
+      <Text>{item.author.name}</Text>
+    </View>
+  )
+}
+
+export default ArticleThumbnail
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Displaying a single Article (cont.)}
+    We'll now bring in our Component into \verb|./src/pages/Home.jsx|. 
+
+    \begin{jscodesmall}
+import ArticleThumbnail from '../components/articleThumbnail'
+
+const Home = () => {
+  return (
+    <View style={globalStyles.container}>
+      <Button onPress={()=>{console.log("Button pressed!")}} />
+      <ArticleThumbnail />
+    </View>
+  )
+}
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Displaying a single Article (cont.)}
+    Next, create an object called \verb|newsItem| with a single article. 
+    You can choose any from the provided link a couple slides back.
+
+    Put the following code above your \verb|Home| const.
+
+    \begin{jscodesmall}
+const newsItem = {
+  "guid": "some-link.html",
+  "url": "some-link.html",
+  "title": "Article Title",
+  "content_html": "Some Text",
+  "summary": "Some Text",
+  "date_published": "2023-05-16T00:08:31.000Z",
+  "author": {
+    "name": "Mark Landler"
+  }
+}
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Displaying a single Article (cont.)}
+    Now, let's give \verb|newsItem| to our \verb|<ArticleThumbnail />|.
+
+    \begin{jscode}
+<ArticleThumbnail item={newsItem} />
+    \end{jscode}
+  \end{frame}
+
+  \section{Displaying multiple Articles}
+  \begin{frame}[fragile]
+    \frametitle{Having data with multiple objects}
+    In \verb|./src/pages/Home.jsx|, add 2 more articles to your \verb|newsItem|.
+    
+    Hint: \verb|newsItem| is now an Array of Objects!
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Rendering multiple ArticleThumbnails}
+    We are able to make as many \verb|<ArticleThumbnail />| instances as needed through a \verb|<Flatlist />|. 
+
+    Replace your singlular \verb|<ArticleThumbnail />| with a \verb|<FlatList />|. 
+
+    Make sure to import \verb|FlatList| from \verb|'react-native'|!
+
+    \begin{jscodesmall}
+import {View, FlatList} from 'react-native'
+
+<FlatList
+  data={newsItem}
+  renderItem={({ item }) => <ArticleThumbnail item={item} />}
+/>
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Fixing our styling}
+    The \verb|<Button />| is blocking our \verb|FlatList| when we attempt to scroll down. 
+
+    Where should we move our \verb|<Button />| instead? 
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Fixing our styling (cont.)}
+    Now as you can see, we have some white space when scrolling our \verb|FlatList| down. 
+
+    Find out which of the style properties in \verb|./src/styles/globalStyles| is causing this behaviour. 
+  \end{frame}
+
+  \section{Making everything look good}
+  \begin{frame}[fragile]
+    \frametitle{Styling our ArticleThumbnail}
+    On your own, find a mobile app that displays Articles and copy their style. (20mins)
+
+    Feel free to ask any questions!
+  \end{frame}
+
+  \appendix
+
+  \begin{frame}[standout]
+    End of Lesson
+
+    {\small Questions? Reach out at:}
+    {\footnotesize karlorjalo@gmail.com}
+  \end{frame}
+
+\end{document}
