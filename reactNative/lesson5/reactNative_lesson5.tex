@@ -61,23 +61,25 @@
     \frametitle{Getting the news}
     We'll be using an online service to convert the New York Times' RSS feed to a JSON object. 
 
-    It is accessible through the link \url{https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml}.
+    It is accessible through the link \url{https://newsapi.org/v2/top-headlines?country=us&apiKey=7c185ff7708e44dea7b0f22f482203d5}.
   \end{frame}
   \begin{frame}[fragile]
     \frametitle{Getting the news (cont.)}
-    Under \verb|result.items|, we can see that we now have an array of articles. The format of each article is as below: 
+    Under \verb|items|, we can see that we now have an array of articles. The format of each article is as below: 
 
     \begin{jscodesmall}
 {
-  "guid": "some-link.html",
-  "url": "some-link.html",
+  "source": {
+      "id": null,
+      "name": "sourceName"
+  },
+  "author": "Author Name",
   "title": "Article Title",
-  "content_html": "Some Text",
-  "summary": "Some Text",
-  "date_published": "2023-05-16T00:08:31.000Z",
-  "author": {
-    "name": "Mark Landler"
-  }
+  "description": "Article Description",
+  "url": "uri",
+  "urlToImage": "uri",
+  "publishedAt": "Publish Date",
+  "content": null
 },
     \end{jscodesmall}
   \end{frame}
@@ -96,10 +98,9 @@ import {View, Text} from 'react-native'
 const ArticleThumbnail = ({item}) => {
   return(
     <View>
-      <Text>{item.title}</Text>
-      <Text>{item.summary}</Text>
-      <Text>{item.date_published}</Text>
-      <Text>{item.author.name}</Text>
+      <Text>{item.title != null ? item.title : ''}</Text>
+      <Text>{item.publishedAt != null ? item.publishedAt : ''}</Text>
+      <Text>{item.author != null ? item.author : ''}</Text>
     </View>
   )
 }
@@ -133,15 +134,17 @@ const Home = () => {
 
     \begin{jscodesmall}
 const newsItem = {
-  "guid": "some-link.html",
-  "url": "some-link.html",
+  "source": {
+      "id": null,
+      "name": "sourceName"
+  },
+  "author": "Author Name",
   "title": "Article Title",
-  "content_html": "Some Text",
-  "summary": "Some Text",
-  "date_published": "2023-05-16T00:08:31.000Z",
-  "author": {
-    "name": "Mark Landler"
-  }
+  "description": "Article Description",
+  "url": "uri",
+  "urlToImage": "uri",
+  "publishedAt": "Publish Date",
+  "content": null
 }
     \end{jscodesmall}
   \end{frame}
@@ -177,6 +180,25 @@ import {View, FlatList} from 'react-native'
   renderItem={({ item }) => <ArticleThumbnail item={item} />}
 />
     \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Explaining <FlatList/>}
+    \verb|<FlatList />| has two required components, the \verb|data| and \verb|renderItem|. 
+
+    \verb|data| must be a list/Array, and the objects of the list would be used for the \verb|renderItem|.
+
+    In the \verb|renderItem|, we must create a function that takes in the individual object of the list.
+    The provided code has this named \verb|item|, but can be renamed to better fit the project as required. 
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Explaining <FlatList/> (cont.)}
+    \verb|<FlatList />| has several other parameters we can provide. 
+
+    Useful ones include \verb|ListHeaderComponent| and \verb|extradata|. 
+
+    Refer to documentation for more details: \url{https://reactnative.dev/docs/flatlist}.
+
   \end{frame}
 
   \begin{frame}[fragile]
