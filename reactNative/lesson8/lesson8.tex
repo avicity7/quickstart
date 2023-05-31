@@ -1,0 +1,217 @@
+\documentclass{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,skins}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\newtcblisting{jscode}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  left=1mm,
+}
+\newtcblisting{jscodesmall}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  minted options={fontsize=\tiny},
+  left=1mm,
+}
+\newtcblisting{bashcode}{
+  listing engine=minted,
+  colback=bashbg,
+  colframe=bashbg,
+  listing only,
+  minted style=native,
+  minted language=bash,
+  minted options={linenos=true,texcl=true},
+  left=1mm,
+}
+\definecolor{codebg}{rgb}{0.2,0.2,0.2}
+\definecolor{bashbg}{rgb}{0.85,0.85,0.85}
+
+\setsansfont{Open Sans}
+
+\usetheme{metropolis}           % Use metropolis theme
+\title{Lesson 8: Becoming a React Native native}
+\subtitle{Auth, Text Input, Pages and more}
+\date{\today}
+\author{Karl Steven Velasco Orjalo}
+\institute{React Native Quickstart}
+
+\begin{document}
+\metroset{block=fill}
+  \maketitle
+
+  \begin{frame}{Lesson Outline}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents
+  \end{frame}
+
+  \section{Firebase Auth}
+  \begin{frame}[fragile]
+    \frametitle{Handling user sign-ins}
+    To handle user authentication as well as Sign-up/in, we'll just use Firebase's Authentication service. 
+
+    Go to to the Firebase console and find `Authentication' under the Build tab on the left. 
+    Create an authentication service with \verb|Email/Password|.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Handling user sign-ins (cont.)}
+    In our app, we have to have at least 2 inputs, an email and a password as well as a Sign-up button. 
+
+    In \verb|./src/pages/Account.jsx| import \verb|TextInput| and \verb|Pressable|. 
+
+    \begin{jscodesmall}
+import { View, FlatList, Text, TextInput, Pressable } from 'react-native'
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Handling user sign-ins (cont.)}
+    Next we can use the \verb|useState()| hook to store our email and password. 
+
+    \begin{jscodesmall}
+const [email,setEmail] = useState('')
+const [password,setPassword] = useState('')
+    \end{jscodesmall}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Handling user sign-ins (cont.)}
+    We'll need some functions from \verb|firebase/auth| so import them. 
+
+    \begin{jscodesmall}
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+    \end{jscodesmall}
+
+    As you can probably guess, we now have a function to check the current auth-ed user, create a new account and sign-in. 
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Handling user sign-ins (cont.)}
+    Now make two pairs of \verb|<Text />| and \verb|<TextInput />|, one for email and one for password. 
+
+    \begin{jscodesmall}
+<Text>Email</Text>
+<TextInput
+        placeholder='email'
+        textContentType='emailAddress'
+        onChangeText={newText => setEmail(newText)}
+    />
+<Text>Password</Text>
+<TextInput
+    placeholder = 'password'
+    textContentType='password'
+    onChangeText={newText => setPassword(newText)}
+/>
+    \end{jscodesmall}
+
+    As you can probably guess, we now have a function to check the current auth-ed user, create a new account and sign-in.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Handling user sign-ins (cont.)}
+    Then call the \verb|createUserWithEmailAndPassword()| function with a \verb|<Pressable />|. 
+
+    \begin{jscodesmall}
+<Pressable 
+onPress = {()=>{
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => { 
+        const user = userCredential.user
+        console.log("User created with email: "+user.email)
+    })
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+    });
+}}
+>
+    <Text style = {{fontSize: 16, color: "black"}}> Sign Up </Text>
+</Pressable>
+    \end{jscodesmall}
+  \end{frame}
+
+    \section{Making nested pages}
+
+    \begin{frame}[fragile]
+      \frametitle{Making a Stack of Pages}
+      In order to push the user into an info page after they've signed up, we can create a Stack of Pages. 
+
+      First, import the following function as such, and \verb|yarn add| the two modules needed. (Small challenge!)
+
+      \begin{jscodesmall}
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+      \end{jscodesmall}
+    \end{frame}
+    \begin{frame}[fragile]
+      \frametitle{Making a Stack of Pages (cont.)}
+      Initialize the Stack with the following code by calling \verb|createNativeStackNavigator|:
+
+      \begin{jscode}
+const Stack = createNativeStackNavigator();
+      \end{jscode}
+    \end{frame}
+    \begin{frame}[fragile]
+      \frametitle{Making a Stack of Pages (cont.)}
+      Rename the existing \verb|const Account| into \verb|const AccountScreen|. 
+
+      Above \verb|const AccountScreen|, create the following page: 
+
+      \begin{jscodesmall}
+const LoggedInScreen = () => {
+  const auth = getAuth()
+
+  return( 
+    <Text>{auth.currentUser.email}</Text>
+  )
+}
+      \end{jscodesmall}
+    \end{frame}
+    \begin{frame}[fragile]
+      \frametitle{Making a Stack of Pages (cont.)}
+      Below \verb|const AccountScreen| create a \verb|const Account| with the following code: 
+
+      \begin{jscodesmall}
+const Account = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+      name = "AccountScreen"
+      component={AccountScreen}
+      options={{ headerShown: false }}
+      />
+      <Stack.Screen
+      name = "LoggedInScreen"
+      component={LoggedInScreen}
+      options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  )
+}        
+      \end{jscodesmall}
+    \end{frame}
+    \begin{frame}[fragile]
+      \frametitle{Making a Stack of Pages (cont.)}
+      Below the \verb|console.log()| put the following code:
+
+      \begin{jscodesmall}
+navigation.navigate("LoggedInScreen")
+      \end{jscodesmall}
+    \end{frame}
+
+  \appendix
+
+  \begin{frame}[standout]
+    End of Lesson
+
+    {\small Questions? Reach out at:}
+    {\footnotesize karlorjalo@gmail.com}
+  \end{frame}
+
+\end{document}
