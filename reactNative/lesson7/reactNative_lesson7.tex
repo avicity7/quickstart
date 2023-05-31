@@ -1,0 +1,241 @@
+\documentclass{beamer}
+\hypersetup{pdfpagemode=FullScreen}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,skins}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\newtcblisting{jscode}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  left=1mm,
+}
+\newtcblisting{jscodesmall}{
+  listing engine=minted,
+  colback=codebg,
+  colframe=codebg,
+  listing only,
+  minted style=monokai,
+  minted language=jsx,
+  minted options={fontsize=\tiny},
+  left=1mm,
+}
+\newtcblisting{bashcode}{
+  listing engine=minted,
+  colback=bashbg,
+  colframe=bashbg,
+  listing only,
+  minted style=native,
+  minted language=bash,
+  minted options={linenos=true,texcl=true},
+  left=1mm,
+}
+\definecolor{codebg}{rgb}{0.2,0.2,0.2}
+\definecolor{bashbg}{rgb}{0.85,0.85,0.85}
+
+\setsansfont{Open Sans}
+
+\usetheme{metropolis}           % Use metropolis theme
+\title{Lesson 7: Becoming a React Native native}
+\subtitle{Working with Firebase}
+\date{\today}
+\author{Karl Steven Velasco Orjalo}
+\institute{React Native Quickstart}
+
+\begin{document}
+\metroset{block=fill}
+  \maketitle
+
+  \begin{frame}{Lesson Outline}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents
+  \end{frame}
+
+  \section{What is Firebase?}
+  \begin{frame}[fragile]
+    \frametitle{What is Firebase?}
+    Firebase is a cloud services provider that Google runs. 
+
+    The specific service we will be using in this lesson is Firestore, a no-SQL database. 
+    This means that data is classified into documents and collections. 
+  \end{frame}
+
+  \section{Using Firebase}
+  \begin{frame}[fragile]
+    \frametitle{Taking a look at the Firestore console}
+    Head to \url{console.firebase.google.com}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Taking a look at the Firestore console (cont.)}
+    Create a new project, then call it \verb|myNewProject|. 
+
+    This name can be anything really, and it does not have to match the name of your working folder/repo.
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Taking a look at the Firestore console (cont.)}
+    Now head to the button that looks like \verb|</>|, where we can `Add Firebase to your web app'. 
+
+    Then, we can register our app as \verb|myNewProject|. Again, this doesn't matter too much. 
+
+    Back in VSCode, in your Terminal enter the following command: 
+
+    \begin{bashcode}
+yarn add firebase
+    \end{bashcode}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Taking a look at the Firestore console (cont.)}
+    Then, in the next step `Add Firebase SDK', copy the \verb|const firebaseConfig = {}| and its contents. 
+
+    This will be used in our project. 
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Setting up Firebase in React Native}
+    Back in VSCode, create a folder in the root folder named \verb|api| then create a file called \verb|firebaseConfig.js|. 
+
+    The hierarchy should look like \verb|./api/firebaseConfig.js|.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Setting up Firebase in React Native(cont.)}
+    In \verb|./api/firebaseConfig.js|, enter the following code and replace the \verb|fireabseConfig| with what you copied previously.
+
+    \begin{jscodesmall}
+import { initializeApp } from 'firebase/app';
+import {getFirestore} from "firebase/firestore";
+
+const firebaseConfig = {
+  // Place your firebaseConfig here
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+module.exports = db;
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Setting up a Firestore database in the Firebase console}
+    In the Firebase console, find the `Firestore Database' page under the Build button on the left. 
+
+    In the Firestore Database page, press `Create database'.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Setting up a Firestore database in the Firebase console (cont.)}
+    Next, select `Start in production mode' and choose \verb|asia-southeast1 (Singapore)| as the server location. 
+
+    This will help Singapore users (in this case, us) access the database with lower latency.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Setting up a Firestore database in the Firebase console (cont.)}
+    Press `Start Collection' and call it testCollection. 
+    Then, give the first document an ID of `testDocument'.
+
+    Make two fields of type \verb|string|, named \verb|title| and \verb|body|. 
+    Inside the values, give set the \verb|title| to \verb|testTitle| and \verb|body| to \verb|testBody|. 
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Getting our document into myNewProject}
+    We'll now work with Firestore in our Account page. Import the \verb|databaseConfig| into \verb|./src/pages/Account.jsx|.
+
+    \begin{jscodesmall}
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from "firebase/firestore";
+
+const firebaseConfig = {
+  // Place your firebaseConfig here
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+module.exports = db;
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Getting our document into myNewProject (cont.)}
+    Inside \verb|./src/pages/Account.jsx|, we now need to import a couple things.
+    Try typing it out, not copying. 
+
+    \begin{jscodesmall}
+import React, {useEffect, useState} from 'react'
+import db from '../../api/firebaseConfig.js'
+import {collection, onSnapshot} from "firebase/firestore"
+import {View, FlatList, Text} from 'react-native'
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Getting our document into myNewProject (cont.)}
+    Now, let's change the displayed contents of the \verb|<View />| into a \verb|<FlatList />|. 
+
+    \begin{jscodesmall}
+return (
+  <View>
+    <FlatList
+      data={data}
+      renderItem={({ item }) => <Text>{item.title}</Text>}
+    />
+  </View>
+)
+    \end{jscodesmall}
+  \end{frame}
+
+  \begin{frame}[fragile]
+    \frametitle{Getting our document into myNewProject (cont.)}
+    Then, create a \verb|data| state. 
+
+    \begin{jscodesmall}
+const [data, setData] = useState()
+    \end{jscodesmall}
+  \end{frame}
+  
+  \begin{frame}[fragile]
+    \frametitle{Getting our document into myNewProject (cont.)}
+    To pre-load the data and receive realtime updates, we will be using the \verb|useEffect| hook and Firestore's \verb|onSnapshot()|. 
+
+    \begin{jscodesmall}
+useEffect(() => {
+  const getDocuments = () => {
+
+    const dbRef = collection(db, 'testCollection')
+  
+    onSnapshot(dbRef, (docsSnap) => {
+      var docsArr = []
+
+      docsSnap.forEach(doc => {
+        docsArr.push(doc.data())
+        setData(docsArr)
+      })
+    })
+  }
+
+  return getDocuments()
+},[])
+    \end{jscodesmall}
+  \end{frame}
+
+  
+
+
+  \appendix
+
+  \begin{frame}[standout]
+    End of Lesson
+
+    {\small Questions? Reach out at:}
+    {\footnotesize karlorjalo@gmail.com}
+  \end{frame}
+
+\end{document}
